@@ -81,9 +81,15 @@ data = load_data('data/macao.csv')
 
 # Select range of data to analyze
 st.sidebar.header("选择数据范围")
-start_row = st.sidebar.number_input("起始行", min_value=1, max_value=len(data), value=1)
-end_row = st.sidebar.number_input("结束行", min_value=1, max_value=len(data), value=len(data))
-filtered_data = data.iloc[start_row-1:end_row]
+latest_period = len(data)
+start_row = st.sidebar.number_input("起始行（最新一期）", min_value=1, max_value=latest_period, value=1)
+end_row = st.sidebar.number_input("结束行（最老一期）", min_value=1, max_value=latest_period, value=latest_period)
+
+# Convert start_row and end_row to match the data indexing
+start_index = latest_period - start_row
+end_index = latest_period - end_row
+
+filtered_data = data.iloc[end_index:start_index + 1]
 
 # Prepare data
 period_data, zodiac_data = prepare_data(filtered_data)
@@ -99,6 +105,7 @@ axes[0, 0].set_title('每个号码出现的次数', fontproperties=font)
 axes[0, 0].set_xlabel('号码', fontproperties=font)
 axes[0, 0].set_ylabel('出现次数', fontproperties=font)
 axes[0, 0].grid(axis='y')
+axes[0, 0].set_xticklabels(axes[0, 0].get_xticklabels(), fontproperties=font)
 
 # Plot zodiac occurrences
 zodiac_columns = filtered_data.columns[50:]
@@ -108,6 +115,7 @@ axes[0, 1].set_title('每个生肖出现的次数', fontproperties=font)
 axes[0, 1].set_xlabel('生肖', fontproperties=font)
 axes[0, 1].set_ylabel('出现次数', fontproperties=font)
 axes[0, 1].grid(axis='y')
+axes[0, 1].set_xticklabels(axes[0, 1].get_xticklabels(), fontproperties=font)
 
 # Odd/even analysis
 odd_even_ratio = analyze_odd_even(period_data)
@@ -116,6 +124,7 @@ axes[1, 0].set_title('单双号比例', fontproperties=font)
 axes[1, 0].set_xlabel('类别', fontproperties=font)
 axes[1, 0].set_ylabel('次数', fontproperties=font)
 axes[1, 0].grid(True)
+axes[1, 0].set_xticklabels(axes[1, 0].get_xticklabels(), fontproperties=font)
 
 # Large/small number analysis
 large_small_ratio = analyze_large_small(period_data)
@@ -124,6 +133,7 @@ axes[1, 1].set_title('大小号比例', fontproperties=font)
 axes[1, 1].set_xlabel('类别', fontproperties=font)
 axes[1, 1].set_ylabel('次数', fontproperties=font)
 axes[1, 1].grid(True)
+axes[1, 1].set_xticklabels(axes[1, 1].get_xticklabels(), fontproperties=font)
 
 # Consecutive number analysis
 consecutive_counts = analyze_consecutive(period_data)
@@ -132,6 +142,7 @@ axes[2, 0].set_title('连号频率', fontproperties=font)
 axes[2, 0].set_xlabel('连号数量', fontproperties=font)
 axes[2, 0].set_ylabel('期数', fontproperties=font)
 axes[2, 0].grid(True)
+axes[2, 0].set_xticklabels(axes[2, 0].get_xticklabels(), fontproperties=font)
 
 # Hot number combinations analysis
 hot_combinations = analyze_hot_combinations(period_data)
@@ -140,6 +151,7 @@ axes[2, 1].set_title('最常出现的号码组合', fontproperties=font)
 axes[2, 1].set_xlabel('号码组合', fontproperties=font)
 axes[2, 1].set_ylabel('出现次数', fontproperties=font)
 axes[2, 1].grid(True)
+axes[2, 1].set_xticklabels(axes[2, 1].get_xticklabels(), fontproperties=font)
 
 # Zodiac combinations heatmap
 zodiac_combinations = analyze_zodiac_combinations(zodiac_data)
@@ -147,10 +159,12 @@ sns.heatmap(zodiac_combinations, cmap="YlGnBu", annot=True, fmt="d", ax=axes[3, 
 axes[3, 0].set_title('生肖组合热力图', fontproperties=font)
 axes[3, 0].set_xlabel('生肖', fontproperties=font)
 axes[3, 0].set_ylabel('生肖', fontproperties=font)
+axes[3, 0].set_xticklabels(axes[3, 0].get_xticklabels(), fontproperties=font)
+axes[3, 0].set_yticklabels(axes[3, 0].get_yticklabels(), fontproperties=font)
 
 # 隐藏最后一个子图（axes[3, 1]）如果不需要
 fig.delaxes(axes[3, 1])
 fig.delaxes(axes[4, 0])
 fig.delaxes(axes[4, 1])
 
-st.pyplot(fig)
+st.pyplot
