@@ -13,7 +13,7 @@ plt.rcParams['font.sans-serif'] = [font.get_name()]
 plt.rcParams['axes.unicode_minus'] = False
 
 # Function to load the data
-@st.cache
+@st.cache_data
 def load_data(file_path):
     data = pd.read_csv(file_path)
     data.columns = data.columns.astype(str)
@@ -83,13 +83,10 @@ filtered_data = data.iloc[end_index:start_index + 1]
 # Prepare data
 period_data, zodiac_data = prepare_data(filtered_data)
 
-# Plotting
-fig, axes = plt.subplots(4, 2, figsize=(20, 20))
-
-# Plot number occurrences
+# Plotting number occurrences
+fig, ax = plt.subplots(figsize=(12, 6))
 number_columns = [str(i) for i in range(1, 50)]
 number_counts = filtered_data[number_columns].count()
-ax = axes[0, 0]
 number_counts.plot(kind='bar', color='skyblue', ax=ax)
 ax.set_title('每个号码出现的次数', fontproperties=font)
 ax.set_xlabel('号码', fontproperties=font)
@@ -98,11 +95,12 @@ ax.grid(axis='y')
 ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font)
 for p in ax.patches:
     ax.annotate(str(int(p.get_height())), (p.get_x() * 1.005, p.get_height() * 1.005))
+st.pyplot(fig)
 
-# Plot zodiac occurrences
+# Plotting zodiac occurrences
+fig, ax = plt.subplots(figsize=(12, 6))
 zodiac_columns = filtered_data.columns[50:]
 zodiac_counts = filtered_data[zodiac_columns].count()
-ax = axes[0, 1]
 zodiac_counts.plot(kind='bar', color='lightgreen', ax=ax)
 ax.set_title('每个生肖出现的次数', fontproperties=font)
 ax.set_xlabel('生肖', fontproperties=font)
@@ -111,10 +109,11 @@ ax.grid(axis='y')
 ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font)
 for p in ax.patches:
     ax.annotate(str(int(p.get_height())), (p.get_x() * 1.005, p.get_height() * 1.005))
+st.pyplot(fig)
 
-# Odd/even analysis
+# Plotting odd/even ratio
+fig, ax = plt.subplots(figsize=(6, 6))
 odd_even_ratio = analyze_odd_even(period_data)
-ax = axes[1, 0]
 odd_even_ratio.plot(kind='bar', color=['blue', 'orange'], ax=ax)
 ax.set_title('单双号比例', fontproperties=font)
 ax.set_xlabel('类别', fontproperties=font)
@@ -123,10 +122,11 @@ ax.grid(True)
 ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font)
 for p in ax.patches:
     ax.annotate(str(int(p.get_height())), (p.get_x() * 1.005, p.get_height() * 1.005))
+st.pyplot(fig)
 
-# Large/small number analysis
+# Plotting large/small number ratio
+fig, ax = plt.subplots(figsize=(6, 6))
 large_small_ratio = analyze_large_small(period_data)
-ax = axes[1, 1]
 large_small_ratio.plot(kind='bar', color=['green', 'red'], ax=ax)
 ax.set_title('大小号比例', fontproperties=font)
 ax.set_xlabel('类别', fontproperties=font)
@@ -135,10 +135,11 @@ ax.grid(True)
 ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font)
 for p in ax.patches:
     ax.annotate(str(int(p.get_height())), (p.get_x() * 1.005, p.get_height() * 1.005))
+st.pyplot(fig)
 
-# Hot number combinations analysis
+# Plotting hot number combinations
+fig, ax = plt.subplots(figsize=(12, 6))
 hot_combinations = analyze_hot_combinations(period_data)
-ax = axes[2, 0]
 hot_combinations.plot(kind='bar', color='cyan', ax=ax)
 ax.set_title('最常出现的号码组合', fontproperties=font)
 ax.set_xlabel('号码组合', fontproperties=font)
@@ -147,19 +148,15 @@ ax.grid(True)
 ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font)
 for p in ax.patches:
     ax.annotate(str(int(p.get_height())), (p.get_x() * 1.005, p.get_height() * 1.005))
+st.pyplot(fig)
 
-# Zodiac combinations heatmap
+# Plotting zodiac combinations heatmap
+fig, ax = plt.subplots(figsize=(12, 12))
 zodiac_combinations = analyze_zodiac_combinations(zodiac_data)
-ax = axes[2, 1]
 sns.heatmap(zodiac_combinations, cmap="YlGnBu", annot=True, fmt="d", ax=ax)
 ax.set_title('生肖组合热力图', fontproperties=font)
 ax.set_xlabel('生肖', fontproperties=font)
 ax.set_ylabel('生肖', fontproperties=font)
 ax.set_xticklabels(ax.get_xticklabels(), fontproperties=font)
 ax.set_yticklabels(ax.get_yticklabels(), fontproperties=font)
-
-# 隐藏最后一个子图（axes[3, 0]和axes[3, 1]）如果不需要
-fig.delaxes(axes[3, 0])
-fig.delaxes(axes[3, 1])
-
 st.pyplot(fig)
