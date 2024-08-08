@@ -4,6 +4,13 @@ import seaborn as sns
 import numpy as np
 from itertools import combinations
 import streamlit as st
+from matplotlib import font_manager
+
+# 加载本地字体文件
+font_path = "fonts/simhei.ttf"  # 确保字体文件路径正确
+font = font_manager.FontProperties(fname=font_path)
+plt.rcParams['font.sans-serif'] = [font.get_name()]
+plt.rcParams['axes.unicode_minus'] = False
 
 # Function to load the data
 @st.cache
@@ -76,66 +83,62 @@ period_data, zodiac_data = prepare_data(data)
 # Plotting
 fig, axes = plt.subplots(5, 2, figsize=(20, 25))
 
-# 设置中文字体
-plt.rcParams['font.sans-serif'] = ['SimHei']
-plt.rcParams['axes.unicode_minus'] = False
-
 # Plot number occurrences
 number_columns = [str(i) for i in range(1, 50)]
 number_counts = data[number_columns].count()
 number_counts.plot(kind='bar', color='skyblue', ax=axes[0, 0])
-axes[0, 0].set_title('每个号码出现的次数')
-axes[0, 0].set_xlabel('号码')
-axes[0, 0].set_ylabel('出现次数')
+axes[0, 0].set_title('每个号码出现的次数', fontproperties=font)
+axes[0, 0].set_xlabel('号码', fontproperties=font)
+axes[0, 0].set_ylabel('出现次数', fontproperties=font)
 axes[0, 0].grid(axis='y')
 
 # Plot zodiac occurrences
 zodiac_columns = data.columns[50:]
 zodiac_counts = data[zodiac_columns].count()
 zodiac_counts.plot(kind='bar', color='lightgreen', ax=axes[0, 1])
-axes[0, 1].set_title('每个生肖出现的次数')
-axes[0, 1].set_xlabel('生肖')
-axes[0, 1].set_ylabel('出现次数')
+axes[0, 1].set_title('每个生肖出现的次数', fontproperties=font)
+axes[0, 1].set_xlabel('生肖', fontproperties=font)
+axes[0, 1].set_ylabel('出现次数', fontproperties=font)
 axes[0, 1].grid(axis='y')
 
 # Odd/even analysis
 odd_even_ratio = analyze_odd_even(period_data)
 odd_even_ratio.plot(kind='bar', color=['blue', 'orange'], ax=axes[1, 0])
-axes[1, 0].set_title('单双号比例')
-axes[1, 0].set_xlabel('类别')
-axes[1, 0].set_ylabel('次数')
+axes[1, 0].set_title('单双号比例', fontproperties=font)
+axes[1, 0].set_xlabel('类别', fontproperties=font)
+axes[1, 0].set_ylabel('次数', fontproperties=font)
 axes[1, 0].grid(True)
 
 # Large/small number analysis
 large_small_ratio = analyze_large_small(period_data)
 large_small_ratio.plot(kind='bar', color=['green', 'red'], ax=axes[1, 1])
-axes[1, 1].set_title('大小号比例')
-axes[1, 1].set_xlabel('类别')
-axes[1, 1].set_ylabel('次数')
+axes[1, 1].set_title('大小号比例', fontproperties=font)
+axes[1, 1].set_xlabel('类别', fontproperties=font)
+axes[1, 1].set_ylabel('次数', fontproperties=font)
 axes[1, 1].grid(True)
 
 # Consecutive number analysis
 consecutive_counts = analyze_consecutive(period_data)
 consecutive_counts.plot(kind='hist', bins=range(consecutive_counts.max() + 2), color='purple', align='left', rwidth=0.8, ax=axes[2, 0])
-axes[2, 0].set_title('连号频率')
-axes[2, 0].set_xlabel('连号数量')
-axes[2, 0].set_ylabel('期数')
+axes[2, 0].set_title('连号频率', fontproperties=font)
+axes[2, 0].set_xlabel('连号数量', fontproperties=font)
+axes[2, 0].set_ylabel('期数', fontproperties=font)
 axes[2, 0].grid(True)
 
 # Hot number combinations analysis
 hot_combinations = analyze_hot_combinations(period_data)
 hot_combinations.plot(kind='bar', color='cyan', ax=axes[2, 1])
-axes[2, 1].set_title('最常出现的号码组合')
-axes[2, 1].set_xlabel('号码组合')
-axes[2, 1].set_ylabel('出现次数')
+axes[2, 1].set_title('最常出现的号码组合', fontproperties=font)
+axes[2, 1].set_xlabel('号码组合', fontproperties=font)
+axes[2, 1].set_ylabel('出现次数', fontproperties=font)
 axes[2, 1].grid(True)
 
 # Zodiac combinations heatmap
 zodiac_combinations = analyze_zodiac_combinations(zodiac_data)
 sns.heatmap(zodiac_combinations, cmap="YlGnBu", annot=True, fmt="d", ax=axes[3, 0])
-axes[3, 0].set_title('生肖组合热力图')
-axes[3, 0].set_xlabel('生肖')
-axes[3, 0].set_ylabel('生肖')
+axes[3, 0].set_title('生肖组合热力图', fontproperties=font)
+axes[3, 0].set_xlabel('生肖', fontproperties=font)
+axes[3, 0].set_ylabel('生肖', fontproperties=font)
 
 # 隐藏最后一个子图（axes[3, 1]）如果不需要
 fig.delaxes(axes[3, 1])
