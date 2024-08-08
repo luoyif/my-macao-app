@@ -4,11 +4,6 @@ import seaborn as sns
 import numpy as np
 from itertools import combinations
 import streamlit as st
-from matplotlib import font_manager
-
-# 设置中文字体，确保你的系统中有适当的中文字体，如SimHei
-plt.rcParams['font.sans-serif'] = ['SimHei']
-plt.rcParams['axes.unicode_minus'] = False
 
 # Function to load the data
 @st.cache
@@ -80,6 +75,10 @@ period_data, zodiac_data = prepare_data(data)
 
 # Plotting
 fig, axes = plt.subplots(5, 2, figsize=(20, 25))
+
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
 
 # Plot number occurrences
 number_columns = [str(i) for i in range(1, 50)]
