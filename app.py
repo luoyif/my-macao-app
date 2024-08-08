@@ -7,7 +7,7 @@ import streamlit as st
 from matplotlib import font_manager
 
 # 加载本地字体文件
-font_path = "fonts/simhei.ttf"  # 确保字体文件路径正确
+font_path = "fonts/SimHei.ttf"  # 确保字体文件路径正确
 font = font_manager.FontProperties(fname=font_path)
 plt.rcParams['font.sans-serif'] = [font.get_name()]
 plt.rcParams['axes.unicode_minus'] = False
@@ -78,14 +78,22 @@ st.title("澳门六合彩分析")
 
 # Load data from local file
 data = load_data('data/macao.csv')
-period_data, zodiac_data = prepare_data(data)
+
+# Select range of data to analyze
+st.sidebar.header("选择数据范围")
+start_row = st.sidebar.number_input("起始行", min_value=1, max_value=len(data), value=1)
+end_row = st.sidebar.number_input("结束行", min_value=1, max_value=len(data), value=len(data))
+filtered_data = data.iloc[start_row-1:end_row]
+
+# Prepare data
+period_data, zodiac_data = prepare_data(filtered_data)
 
 # Plotting
 fig, axes = plt.subplots(5, 2, figsize=(20, 25))
 
 # Plot number occurrences
 number_columns = [str(i) for i in range(1, 50)]
-number_counts = data[number_columns].count()
+number_counts = filtered_data[number_columns].count()
 number_counts.plot(kind='bar', color='skyblue', ax=axes[0, 0])
 axes[0, 0].set_title('每个号码出现的次数', fontproperties=font)
 axes[0, 0].set_xlabel('号码', fontproperties=font)
@@ -93,8 +101,8 @@ axes[0, 0].set_ylabel('出现次数', fontproperties=font)
 axes[0, 0].grid(axis='y')
 
 # Plot zodiac occurrences
-zodiac_columns = data.columns[50:]
-zodiac_counts = data[zodiac_columns].count()
+zodiac_columns = filtered_data.columns[50:]
+zodiac_counts = filtered_data[zodiac_columns].count()
 zodiac_counts.plot(kind='bar', color='lightgreen', ax=axes[0, 1])
 axes[0, 1].set_title('每个生肖出现的次数', fontproperties=font)
 axes[0, 1].set_xlabel('生肖', fontproperties=font)
