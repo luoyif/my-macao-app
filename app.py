@@ -80,6 +80,11 @@ end_index = latest_period - end_row
 
 filtered_data = data.iloc[end_index:start_index + 1]
 
+# Display raw data
+if st.sidebar.checkbox("显示原始数据"):
+    st.subheader("原始数据")
+    st.write(filtered_data)
+
 # Prepare data
 period_data, zodiac_data = prepare_data(filtered_data)
 
