@@ -65,8 +65,15 @@ def analyze_zodiac_combinations(zodiac_data):
 # Streamlit app
 st.title("澳门六合彩分析")
 
-# Load data from local file
-data = load_data('data/macao.csv')
+# Select data file
+st.sidebar.header("选择数据文件")
+data_file = st.sidebar.selectbox("选择数据文件", ["所有码", "特码"])
+
+# Load selected data
+if data_file == "所有码":
+    data = load_data('data/macao.csv')
+else:
+    data = load_data('data/macao_te.csv')
 
 # Select range of data to analyze
 st.sidebar.header("选择数据范围")
