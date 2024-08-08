@@ -63,7 +63,7 @@ def analyze_zodiac_combinations(zodiac_data):
     return combinations_counts
 
 # Streamlit app
-st.title("澳门六合彩分析")
+st.title("澳门六合彩-分析")
 
 # Select data file
 st.sidebar.header("选择数据文件")
