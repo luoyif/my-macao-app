@@ -164,7 +164,4 @@ axes[3, 0].set_yticklabels(axes[3, 0].get_yticklabels(), fontproperties=font)
 
 # 隐藏最后一个子图（axes[3, 1]）如果不需要
 fig.delaxes(axes[3, 1])
-fig.delaxes(axes[4, 0])
-fig.delaxes(axes[4, 1])
-
-st.pyplot
+fig.delaxes(axes[4,
